@@ -14,16 +14,26 @@ public class Activity {
     private User user;
     private int duration;
 
-    private static int activityCount = 0;
+    private static int activityCount = 1233;
 
-    public Activity() {}
-
-    public Activity(User user, String desc, int duration) {
-        this.id = Integer.toString(++activityCount);
+    public Activity(String id, User user, String desc, int duration) {
+        this.id = id;
         this.user = user;
         this.description = desc;
         this.duration = duration;
     }
+
+    // Provide ID if not provided
+    public Activity(User user, String desc, int duration) {
+        this(Integer.toString(++activityCount), user, desc, duration);
+    }
+
+    public Activity(String description, int duration) {
+        this(new User("Default User"), description, duration);
+    }
+
+    public Activity() {}
+
 
     @XmlElement(name="desc")
     public String getDescription() {

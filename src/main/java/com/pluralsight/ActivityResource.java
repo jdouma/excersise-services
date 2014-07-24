@@ -8,6 +8,7 @@ import com.pluralsight.repository.ActivityRepositoryStub;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -27,8 +28,19 @@ public class ActivityResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("{activityId}")
-    public Activity getActivity(@PathParam("activityId") String activityId) {
-        return mActivityRepository.findActivity(activityId);
+    public Response getActivity(@PathParam("activityId") String activityId) {
+        if (activityId == null || activityId.length() < 4 ) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        Activity activity = mActivityRepository.findActivity(activityId);
+        if ( activity == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        System.out.println("Getting activity " + activityId);
+
+        return Response.ok().entity(activity).build();
     }
 
     @GET
@@ -55,7 +67,39 @@ public class ActivityResource {
         Activity activity = new Activity(new User(name), desc,
                 Integer.parseInt(dur));
 
-        return null;
+        mActivityRepository.create(activity);
+
+        return activity;
+    }
+
+    @POST
+    @Path("activity")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Activity createActivity(Activity activity) {
+
+        System.out.println(activity.getDescription());
+        System.out.println(activity.getDuration());
+        System.out.println(activity.getUser().getName());
+
+        mActivityRepository.create(activity);
+
+        return activity;
+    }
+
+    @PUT
+    @Path("activity/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response update(Activity activity) {
+        System.out.println(activity.getDescription());
+        System.out.println(activity.getDuration());
+        System.out.println(activity.getUser().getName());
+
+        mActivityRepository.update(activity);
+
+        return Response.ok().entity(activity).build();
+
     }
 }
 

@@ -32,8 +32,39 @@ public class ActivityRepositoryStub implements ActivityRepository {
         return activities;
     }
 
+    @Override
     public Activity findActivity(String activityId) {
 
+        for (Activity a: activities) {
+            if (a.getId().equals(activityId)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void create(Activity activity) {
+        activities.add(activity);
+    }
+
+    @Override
+    public void update(Activity newActivity) {
+
+        if (newActivity != null) {
+            Activity oldActivity = findActivity(newActivity.getId());
+            if (oldActivity != null) {
+                int index = activities.indexOf(oldActivity);
+                activities.set(index, newActivity);
+            } else {
+                activities.add(newActivity);
+            }
+        }
+    }
+
+    public Activity findActivityIndex (String activityId) {
+
+        int index = 0;
         for (Activity a: activities) {
             if (a.getId().equals(activityId)) {
                 return a;
