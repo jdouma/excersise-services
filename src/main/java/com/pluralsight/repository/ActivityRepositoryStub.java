@@ -6,6 +6,7 @@ import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by jdouma on 7/23/2014.
@@ -17,13 +18,23 @@ public class ActivityRepositoryStub implements ActivityRepository {
 
     static {
 
-        User user1 = new User("Justin");
+        String[] userNames = {"Justin", "Mary", "Jake", "Betty", "Bob",
+            "Vero", "Darlington", "Elsa", "Eddy", "Francis"};
 
-        Activity activity1 = new Activity(user1, "Swimming", 55);
-        activities.add(activity1);
+        Random random = new Random();
 
-        Activity activity2 = new Activity(user1, "Cycling", 120);
-        activities.add(activity2);
+        for (String name : userNames) {
+            User user = new User(name);
+
+            Activity activity1 = new Activity(user, "Swimming", random.nextInt(121));
+            activities.add(activity1);
+
+            Activity activity2 = new Activity(user, "Cycling", random.nextInt(121));
+            activities.add(activity2);
+
+            Activity activity3 = new Activity(user, "Running", random.nextInt(121));
+            activities.add(activity3);
+        }
     }
 
     @Override

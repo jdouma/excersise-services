@@ -57,7 +57,7 @@ public class ActivityClientTest {
         assertNotNull(activity);
     }
 
-    @Test
+    @Test//(expected = RuntimeException.class)
     public void testPut() {
         Activity activity = new Activity("3456",new User("Sam"), "Yoga", 77);
         activity = client.update(activity);

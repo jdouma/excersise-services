@@ -4,6 +4,7 @@ import com.pluralsight.model.Activity;
 import com.pluralsight.model.User;
 import com.pluralsight.repository.ActivityRepository;
 import com.pluralsight.repository.ActivityRepositoryStub;
+import org.glassfish.jersey.server.JSONP;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,7 +27,8 @@ public class ActivityResource {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @JSONP
+    @Produces("application/x-javascript")
     @Path("{activityId}")
     public Response getActivity(@PathParam("activityId") String activityId) {
         if (activityId == null || activityId.length() < 4 ) {
@@ -39,6 +41,7 @@ public class ActivityResource {
         }
 
         System.out.println("Getting activity " + activityId);
+    //    System.out.println("callback: " + callback);
 
         return Response.ok().entity(activity).build();
     }
@@ -88,7 +91,7 @@ public class ActivityResource {
     }
 
     @PUT
-    @Path("activity/{id}")
+    @Path("{activityId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response update(Activity activity) {

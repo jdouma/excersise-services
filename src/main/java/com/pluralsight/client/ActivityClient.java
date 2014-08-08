@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.*;
 
 
-import java.awt.*;
 import java.util.List;
 
 
@@ -32,7 +31,7 @@ public class ActivityClient {
     public Activity get(String id) {
         Response response = target.path("activities/" + id).request().get(Response.class);
 
-        checkforErrors(response.getStatus());
+        checkForErrors(response.getStatus());
 
         return response.readEntity(Activity.class);
     }
@@ -50,24 +49,24 @@ public class ActivityClient {
 
         Response response = target.path("activities/activity")
                 .request().post(Entity.entity(activity, MediaType.APPLICATION_JSON));
-        checkforErrors(response.getStatus());
+        checkForErrors(response.getStatus());
 
         return response.readEntity(Activity.class);
-    }
-
-    private void checkforErrors(int statusCode) {
-        if (statusCode != Status.OK.getStatusCode()) {
-            throw new RuntimeException(statusCode +
-                    ": there was an error on the server");
-        }
     }
 
     public Activity update(Activity activity) {
 
         Response response = target.path("activities/" + activity.getId())
                 .request().put(Entity.entity(activity, MediaType.APPLICATION_JSON));
-        checkforErrors(response.getStatus());
+        checkForErrors(response.getStatus());
 
         return response.readEntity(Activity.class);
+    }
+
+    private void checkForErrors(int statusCode) {
+        if (statusCode != Status.OK.getStatusCode()) {
+            throw new RuntimeException(statusCode +
+                    ": there was an error on the server");
+        }
     }
 }
